@@ -4,17 +4,36 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
+    "axios": "^0.21.0",
+    "cheerio": "^1.0.0-rc.3",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.2",
+    "nedb": "^1.8.0",
+    "view-design": "^4.0.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "xgplayer": "^2.12.2",
+    "xgplayer-hls": "^2.3.36"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "^4.5.8",
+    "@vue/cli-plugin-router": "^4.5.8",
+    "@vue/cli-service": "^4.5.8",
+    "babel-plugin-import": "^1.8.0",
+    "electron": "^9.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "vue-cli-plugin-electron-builder": "^2.0.0-rc.4",
+    "vue-cli-plugin-iview": "^2.0.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

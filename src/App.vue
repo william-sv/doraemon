@@ -1,32 +1,35 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Row>
+      <Col span="4">
+        <div class="side-wrap">
+          <LeftSide />
+        </div>
+      </Col>
+      <Col span="20">
+        <Main />
+      </Col>
+    </Row>
   </div>
 </template>
+<script>
+  import LeftSide from './views/layouts/leftSide'
+  import Main from './views/layouts/main'
+  export default {
+    name: 'app',
+    components: {
+      LeftSide,
+      Main,
+    },
+  }
+</script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  width: 100vw;
+  height: 100vh;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.side-wrap {
+  width: calc(100vw / 24 * 4);
 }
 </style>
