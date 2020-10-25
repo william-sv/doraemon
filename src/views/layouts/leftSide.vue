@@ -1,21 +1,23 @@
 <template>
   <div class="left-side-wrap">
     <div class="menu-wrap">
-      <span class="menu-group-title">本地视频库</span>
-      <div class="menu-item" v-for="menu in menus.library" @click="jumpTo(menu.path)">
-        <Icon :type="menu.icon" />
-        <span class="menu-item-title">{{menu.name}}</span>
+      <div v-for="menu in menus">
+        <span class="menu-group-title">{{ menu.name }}</span>
+        <div class="menu-item" v-for="item in menu.children" @click="jumpTo(item.path)">
+          <Icon :type="item.icon" />
+          <span class="menu-item-title">{{item.name}}</span>
+        </div>
       </div>
-      <span class="menu-group-title">网络资源</span>
-      <div class="menu-item" v-for="menu in menus.web" @click="jumpTo(menu.path)">
-        <Icon :type="menu.icon" />
-        <span class="menu-item-title">{{menu.name}}</span>
-      </div>
-      <span class="menu-group-title">设置</span>
-      <div class="menu-item" v-for="menu in menus.setting" @click="jumpTo(menu.path)">
-        <Icon :type="menu.icon" />
-        <span class="menu-item-title">{{menu.name}}</span>
-      </div>
+<!--      <span class="menu-group-title">网络资源</span>-->
+<!--      <div class="menu-item" v-for="menu in menus.web" @click="jumpTo(menu.path)">-->
+<!--        <Icon :type="menu.icon" />-->
+<!--        <span class="menu-item-title">{{menu.name}}</span>-->
+<!--      </div>-->
+<!--      <span class="menu-group-title">设置</span>-->
+<!--      <div class="menu-item" v-for="menu in menus.setting" @click="jumpTo(menu.path)">-->
+<!--        <Icon :type="menu.icon" />-->
+<!--        <span class="menu-item-title">{{menu.name}}</span>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -24,44 +26,53 @@ export default {
   name: 'LeftSide',
   data(){
     return {
-      menus: {
-        library: [
-          {
-            name: '本地视频',
-            icon: 'ios-folder-outline',
-            path: '/local',
-          },
-        ],
-        web: [
-          {
-            name: '日剧',
-            icon: 'ios-cloud-outline',
-            path: '/web/jp'
-          },
-          {
-            name: '美剧',
-            icon: 'ios-cloud-outline',
-            path: '/web/mj'
-          },
-          {
-            name: '综合',
-            icon: 'ios-cloud-outline',
-            path: '/web/btdx8'
-          },
-        ],
-        setting: [
-          {
-            name: '视频库管理',
-            icon: 'ios-film-outline',
-            path: '/local-library',
-          },
-          {
-            name: '关于',
-            icon: 'ios-information-circle-outline',
-            path: '/about',
-          },
-        ]
-      }
+      menus: [
+        {
+          name: '本地资源',
+          children: [
+            {
+              name: '本地视频',
+              icon: 'ios-folder-outline',
+              path: '/local',
+            },
+          ]
+        },
+        {
+          name: '网络资源',
+          children: [
+            {
+              name: '日剧',
+              icon: 'ios-cloud-outline',
+              path: '/web/jp'
+            },
+            {
+              name: '美剧',
+              icon: 'ios-cloud-outline',
+              path: '/web/mj'
+            },
+            {
+              name: '综合',
+              icon: 'ios-cloud-outline',
+              path: '/web/btdx8'
+            },
+          ]
+        },
+        {
+          name: '设置',
+          children: [
+            {
+              name: '视频库管理',
+              icon: 'ios-film-outline',
+              path: '/local-library',
+            },
+            {
+              name: '关于',
+              icon: 'ios-information-circle-outline',
+              path: '/about',
+            },
+          ]
+        }
+      ]
     }
   },
   methods: {
@@ -94,9 +105,8 @@ export default {
       align-items: center;
       justify-content: start;
       padding-left: 10px;
-      margin: 0 10px 10px 10px;
+      margin: 10px;
       border-radius: 10px;
-      // border-bottom: 1px solid #000000;
   }
   .menu-item-title {
     display: inline-block;

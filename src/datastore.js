@@ -5,9 +5,9 @@ import { remote } from 'electron'
 const db = {}
 
 // 分类数据库
-db.categories = new Datastore({
+db.genres = new Datastore({
   autoload: true,
-  filename: path.join(remote.app.getPath('userData'), '/categories.db')
+  filename: path.join(remote.app.getPath('userData'), '/genres.db')
 })
 
 // 菜单数据库

@@ -17,8 +17,11 @@ async function fetchList (){
   for (const elem of tvListElem) {
     let name = $('a',elem).eq(1).text()
     let pid = ($('a',elem).eq(1).attr('href')).replace('viewtvplay-','').replace('.html','')
-    result.push({name,pid})
+    let genre = $(elem).next().text()
+    let status = $(elem).next().next().text() //连载状态：连载，完结
+    result.push({pid,name,genre,status})
   }
+
 
   return result
 }

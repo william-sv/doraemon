@@ -10,7 +10,7 @@ module.exports = {
     //       "output": "./dist_electron"
     //     },
     //     // "mac": {
-    //     //   "category": "Doraemon",
+    //     //   "genre": "Doraemon",
     //     //   "icon": "./icons/icon.png",
     //     // }
     //   }

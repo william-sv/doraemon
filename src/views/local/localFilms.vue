@@ -2,8 +2,8 @@
   <div class="playlist-wrap">
     <div class="nav-wrap">
       <Row :gutter="5">
-        <Col span="2" v-for="category in categories" :key="category._id" class="category-item">
-          <div style="width:100%;height:100%;cursor:pointer" @click="handleScreening(category)">{{ category.name }}</div>
+        <Col span="2" v-for="genre in genres" :key="genre._id" class="genre-item">
+          <div style="width:100%;height:100%;cursor:pointer" @click="handleScreening(genre)">{{ genre.name }}</div>
         </Col>
       </Row>
     </div>
@@ -37,7 +37,7 @@ export default {
   data(){
     return {
       showFilmPlayArea: false,
-      categories: [
+      genres: [
 
         {
           id: 1,
@@ -221,7 +221,7 @@ export default {
     handlePlayFilm(filmPath){
       filmPath = '/Users/will/movie/出师表第01-02集_2.mp4'
       this.showFilmPlayArea = true
-      if(filmPath != ''){
+      if(filmPath !== ''){
         this.$refs.playFilm.handleStartPlay({filmPath: filmPath})
       }
     },
@@ -229,26 +229,26 @@ export default {
       this.$refs.playFilm.handleDestoryPlay()
       this.showFilmPlayArea = false
     },
-    fetchCategories(){
+    fetchGenres(){
       const that = this
       return new Promise(function(resolve, reject){
-        that.$db.categories.find({},(error,docs)=>{
+        that.$db.genres.find({},(error,docs)=>{
           if(error){
             reject(error)
           }
           resolve()
-          that.categories = docs
+          that.genres = docs
         })
       })
     },
-    initCategory(){ // 初始化分类数据
+    initGenre(){ // 初始化分类数据
       const that = this
       return new Promise(function(resolve, reject){
-        const categories = [
+        const genres = [
           '科幻','喜剧','动作','奇幻','冒险','武侠','爱情','悬疑','惊悚','恐怖','犯罪','音乐','歌舞','传记','历史','战争','西部','灾难','动画'
         ]
-        categories.forEach((item, index) => {
-          that.$db.categories.insert({name: item, sort: index}, (error,doc) => {
+        genres.forEach((item, index) => {
+          that.$db.genres.insert({name: item, sort: index}, (error,doc) => {
             if(error){reject(error)}
             resolve()
           })
@@ -258,11 +258,11 @@ export default {
   },
   async created(){
     // 读取分类数据
-    // await this.fetchCategories()
+    // await this.fetchGenres()
     // 如果分类数据为空，则初始化分类数据，再重新读取
-    // if(this.categories.length === 0){
-    //   await this.initCategory()
-    //   await this.fetchCategories()
+    // if(this.genres.length === 0){
+    //   await this.initGenre()
+    //   await this.fetchGenres()
     // }
   },
 }
@@ -271,7 +271,7 @@ export default {
   .nav-wrap {
     margin-bottom: 20px;
   }
-  .category-item {
+  .genre-item {
     display: block;
     margin: 5px 0;
     text-align: center;
@@ -288,7 +288,7 @@ export default {
     background-repeat: no-repeat;
     background-size: contain;
   }
-  .film-poster, .film-play-btn {
+  .film-play-btn {
     width: 100%;
     height: 100%;
   }
