@@ -1,19 +1,18 @@
 # doraemon
 
-## Project setup
-```
-yarn install
-```
+> 影音多媒体管理软件
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+#### 实现功能
+- [ ] 播放本地视频文件
+- [ ] 管理本地视频文件
+- [ ] 采集网络资源
+- [ ] 下载网络资源
 
-### Compiles and minifies for production
-```
-yarn build
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### 使用技术栈
+- Electron
+- Vue
+- iview design
+- xgplayer
+- cheeiro
+- axios
