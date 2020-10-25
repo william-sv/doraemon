@@ -57,7 +57,7 @@ export default {
           },
           {
             name: '关于',
-            icon: 'ios-film-outline',
+            icon: 'ios-information-circle-outline',
             path: '/about',
           },
         ]
@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     jumpTo(path){
-      if (this.$route.path != path && path != '') {
+      if (this.$route.path !== path && path !== '') {
         this.$router.push({
           path: path
         })
