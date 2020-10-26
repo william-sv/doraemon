@@ -13,6 +13,9 @@ import {
   Message,
   Table,
   Tag,
+  Form,
+  FormItem,
+  Input,
 } from 'view-design'
 
 Vue.component('Button', Button)
@@ -24,8 +27,12 @@ Vue.component('Scroll', Scroll)
 Vue.component('Tabs', Tabs)
 Vue.component('TabPane', TabPane)
 Vue.component('Spin', Spin)
+Vue.component('Modal', Modal)
 Vue.component('Table', Table)
 Vue.component('Tag', Tag)
+Vue.component('Form', Form)
+Vue.component('FormItem', FormItem)
+Vue.component('Input', Input)
 
 
 Vue.prototype.$Modal = Modal

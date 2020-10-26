@@ -8,16 +8,6 @@
           <span class="menu-item-title">{{item.name}}</span>
         </div>
       </div>
-<!--      <span class="menu-group-title">网络资源</span>-->
-<!--      <div class="menu-item" v-for="menu in menus.web" @click="jumpTo(menu.path)">-->
-<!--        <Icon :type="menu.icon" />-->
-<!--        <span class="menu-item-title">{{menu.name}}</span>-->
-<!--      </div>-->
-<!--      <span class="menu-group-title">设置</span>-->
-<!--      <div class="menu-item" v-for="menu in menus.setting" @click="jumpTo(menu.path)">-->
-<!--        <Icon :type="menu.icon" />-->
-<!--        <span class="menu-item-title">{{menu.name}}</span>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
@@ -63,7 +53,7 @@ export default {
             {
               name: '视频库管理',
               icon: 'ios-film-outline',
-              path: '/local-library',
+              path: '/library',
             },
             {
               name: '关于',

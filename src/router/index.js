@@ -7,12 +7,17 @@ const routes = [
   {
     path: '/local',
     name: 'LocalFilms',
-    component: () => import(/* webpackChunkName: "local-films" */ '../views/local/localFilms.vue'),
+    component: () => import(/* webpackChunkName: "local-page" */ '../views/local/localPage.vue'),
   },
   {
     path: '/web/jp',
     name: 'WebFilms',
-    component: () => import(/* webpackChunkName: "web-films" */ '../views/web/webFilms.vue'),
+    component: () => import(/* webpackChunkName: "web-jp" */ '../views/web/webPage.vue'),
+  },
+  {
+    path: '/library',
+    name: 'Library',
+    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/libraryPage.vue'),
   },
   {
     path: '/about',

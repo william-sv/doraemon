@@ -2,7 +2,7 @@
   <div class="web-films-wrap">
     <div class="web-nav">
       <div class="web-tips">
-        <Alert>日剧主要采集自 追新番 （http://www.zhuixinfan.com/main.php）</Alert>
+        <Alert>日剧资源主要来自 追新番 （http://www.zhuixinfan.com/main.php）</Alert>
       </div>
       <div class="zxf-init" v-if="zxfCrawlerInit">
         <Alert show-icon>

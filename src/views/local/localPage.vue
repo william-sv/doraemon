@@ -2,7 +2,7 @@
   <div class="playlist-wrap">
     <div class="nav-wrap">
       <Row :gutter="5">
-        <Col span="2" v-for="genre in genres" :key="genre._id" class="genre-item">
+        <Col :sm="2" :xl="1" v-for="genre in genres" :key="genre._id" class="genre-item">
           <div style="width:100%;height:100%;cursor:pointer" @click="handleScreening(genre)">{{ genre.name }}</div>
         </Col>
       </Row>
@@ -10,7 +10,7 @@
     <div class="playlist-item">
       <Row>
         <Scroll :on-reach-bottom="handleLoadingFiles" height="600">
-          <Col span="4" v-for="film in filmsList" :key="film._id">
+          <Col :sm="4" :xl="4" :xxl="2" v-for="film in filmsList" :key="film._id">
             <div class="film-item" @click="handlePlayFilm(film.absolutePath)">
               <div class="film-poster-item" :style="{ backgroundImage: film.poster != '' ? 'url(' + film.poster + ') ' : 'url(' + require('../../assets/no_poster.png') + ')' }">
                 <img :src="require('../../assets/play.png')" class="film-play-btn">
