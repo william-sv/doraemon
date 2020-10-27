@@ -16,6 +16,7 @@ import {
   Form,
   FormItem,
   Input,
+  Page,
 } from 'view-design'
 
 Vue.component('Button', Button)
@@ -33,6 +34,8 @@ Vue.component('Tag', Tag)
 Vue.component('Form', Form)
 Vue.component('FormItem', FormItem)
 Vue.component('Input', Input)
+Vue.component('Page', Page)
+
 
 
 Vue.prototype.$Modal = Modal

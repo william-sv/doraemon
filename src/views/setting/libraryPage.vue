@@ -6,7 +6,7 @@
     </div>
     <Table border stripe height="600" size="small" :columns="columns" :data="libraryData">
       <template slot-scope="{ row, index }" slot="action">
-        <Button style="margin-right: 5px;" type="success" size="small" icon="ios-eye">查看</Button>
+        <Button style="margin-right: 5px;" type="success" size="small" icon="ios-eye" @click="handleViewFiles">查看</Button>
         <Button type="error" size="small" icon="ios-trash" @click="handleDelLibrary">删除</Button>
       </template>
     </Table>
@@ -15,20 +15,34 @@
         新增视频库
       </p>
       <AddForm ref="addForm" />
+      <Alert type="warning" show-icon>
+        <template slot="desc">
+          1.该地址为您电脑上存放视频的文件夹地址<br />
+          2.确认后会生成该文件夹下视频文件的缓存
+        </template>
+      </Alert>
       <div slot="footer">
         <Button type="success" @click="handleAddLibrary" long>确认</Button>
       </div>
+    </Modal>
+    <Modal v-model="openViewFilesModal" width="80%" :footer-hide="true">
+      <div slot="header" style="text-align: center;font-weight: bold;font-size: 14px;">
+        视频库1
+      </div>
+      <FilesTable />
     </Modal>
   </div>
 </template>
 
 <script>
   import AddForm from "@/views/setting/components/AddForm"
+  import FilesTable from "@/views/setting/components/FilesTable"
   export default {
     name: "Library",
     data(){
       return {
         openAddLibraryModal: false,
+        openViewFilesModal: false,
         columns: [
           {
             title: '库名',
@@ -45,28 +59,12 @@
             width: '170'
           },
         ],
-        libraryData: [
-          {
-            name: '视频库1',
-            absolutePath: '/Users/will/movie',
-          },
-          {
-            name: '视频库2',
-            absolutePath: '/Users/will/movie',
-          },
-          {
-            name: '视频库3',
-            absolutePath: '/Users/will/movie',
-          },
-          {
-            name: '视频库4',
-            absolutePath: '/Users/will/movie',
-          },
-        ]
+        libraryData: [],
       }
     },
     components: {
       AddForm,
+      FilesTable
     },
     methods: {
       handleAddLibrary(){
@@ -93,6 +91,9 @@
             })
           }
         })
+      },
+      handleViewFiles(){
+        this.openViewFilesModal = true
       },
     }
   }
