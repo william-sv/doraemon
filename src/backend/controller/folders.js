@@ -1,4 +1,4 @@
-// 读取文件夹内文件
+// 读取文件夹内文件 controller
 const fs = require('fs')
 const path = require('path')
 
@@ -7,11 +7,15 @@ exports.index = async (req, res) => {
     if(dirPath === undefined){
         res.json({status: 200, msg: '缺少必要参数', files: []})
     }
+    if(!fs.existsSync(dirPath)){
+        res.json({status: 200, msg: '该文件夹不存在', files: []})
+    }
     const dirFiles = []
     await readFileFromFolder(dirPath, dirFiles)
     res.json({status: 200, msg: '',files: dirFiles})
 }
 
+// 读取文件
 async function readFileFromFolder(dirPath, dirFiles){
     const usefulFiles = ['mp4','webm','ogg','mkv','avi','mov','asf','wmv','navi','3gp','flv','f4v','rmvb','hddvd','rm','rmvb']
     const files = fs.readdirSync(dirPath)

@@ -6,8 +6,8 @@ import './plugins/iview.js'
 import axios from 'axios'
 
 // NeDB数据库
-// import db from './datastore'
-// Vue.prototype.$db = db
+import db from './datastore'
+Vue.prototype.$db = db
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios

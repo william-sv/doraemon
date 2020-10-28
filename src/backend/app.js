@@ -3,7 +3,6 @@
   var routes = require('./route')
   var app = express()
 
-
   // 跨域
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')

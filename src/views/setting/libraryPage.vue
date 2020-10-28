@@ -16,6 +16,7 @@
       </p>
       <AddForm ref="addForm" />
       <Alert type="warning" show-icon>
+        关于 地址 字段的注释
         <template slot="desc">
           1.该地址为您电脑上存放视频的文件夹地址<br />
           2.确认后会生成该文件夹下视频文件的缓存
