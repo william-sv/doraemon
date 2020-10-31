@@ -5,7 +5,7 @@
       <Button type="primary" icon="md-albums" size="small">生成合集</Button>
       <Button type="success" icon="md-refresh" size="small" style="margin-left: 10px;">更新播放列表</Button>
     </div>
-    <Table border ref="playlist" :columns="columns" size="small" :data="playlist" @on-select="handleSelection">
+    <Table border ref="playlist" height="600" :columns="columns" size="small" :data="playlist" @on-select="handleSelection">
 
     </Table>
   </div>

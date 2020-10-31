@@ -1,6 +1,6 @@
 <template>
   <div class="film-wrap">
-    <Table border stripe height="640" size="small" :columns="columns" :data="filmsData">
+    <Table border stripe height="600" size="small" :columns="columns" :data="filmsData">
       <template slot-scope="{ row, index }" slot="status">
         <Tag color="green" v-if="row.status === '连载'">连载</Tag>
         <Tag color="red" v-else>完结</Tag>

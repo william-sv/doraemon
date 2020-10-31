@@ -44,20 +44,23 @@
               const msg = response.data.msg
               let filesData = response.data.files
               const filesCount = filesData.length
+              let created_at = (new Date()).getTime() //文件写入时间 unix时间戳(毫秒数)
               if(msg.length > 0){
                 this.$Message.error('╮(￣▽￣)╭ ' + msg)
               }
               // 存储视频库信息
-              const saveLibraries = await this.saveLibrariesData({name:this.addLibrary.name, dirPath: this.addLibrary.dirPath, filesCount: filesCount})
+              const saveLibraries = await this.saveLibrariesData({name:this.addLibrary.name, dirPath: this.addLibrary.dirPath, filesCount: filesCount,created_at: created_at})
               if(!saveLibraries){
                 this.$Message.error('╮(￣▽￣)╭ 保存文件时出现错误，请稍后从重试~')
                 return
               }
               if(filesCount > 0){
                 const library_id = saveLibraries._id
+                let created_at = (new Date()).getTime() //文件写入时间 unix时间戳(毫秒数)
                 // 存储视频库内文件信息
                 filesData.forEach((item) => {
                   item.library_id = library_id
+                  item.created_at = created_at
                 })
                 const saveFilesStatus = await this.saveFilesData(filesData)
                 if(!saveFilesStatus){

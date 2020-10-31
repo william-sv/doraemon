@@ -17,6 +17,7 @@ import {
   FormItem,
   Input,
   Page,
+  Poptip,
 } from 'view-design'
 
 Vue.component('Button', Button)
@@ -35,6 +36,7 @@ Vue.component('Form', Form)
 Vue.component('FormItem', FormItem)
 Vue.component('Input', Input)
 Vue.component('Page', Page)
+Vue.component('Poptip', Poptip)
 
 
 

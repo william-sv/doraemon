@@ -6,9 +6,18 @@
     </div>
     <Table border stripe height="600" size="small" :columns="columns" :data="librariesData">
       <template slot-scope="{ row, index }" slot="action">
-        <Button style="margin-right: 5px;" type="success" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)">查看</Button>
-        <Button style="margin-right: 5px;" type="success" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)">更新</Button>
-        <Button type="error" size="small" icon="ios-trash" @click="handleDelLibrary(index,row._id)">删除</Button>
+        <Poptip trigger="hover" content="查看视频库内文件" placement="top-end">
+          <Button style="margin-right: 5px;" type="info" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)" shape="circle"></Button>
+        </Poptip>
+        <Poptip trigger="hover" content="重新缓存视频库内文件" placement="top-end">
+          <Button style="margin-right: 5px;" type="success" size="small" icon="md-refresh" @click="handleReloadFiles(row._id,row.name)" shape="circle"></Button>
+        </Poptip>
+        <Poptip trigger="hover" content="将视频库合并至播放列表" placement="top-end">
+          <Button style="margin-right: 5px;" type="primary" size="small" icon="ios-list-box" @click="handleAppendPlaylist(row._id,row.name)" shape="circle"></Button>
+        </Poptip>
+        <Poptip trigger="hover" content="删除视频库及缓存的文件" placement="top-end">
+          <Button type="error" size="small" icon="ios-trash" @click="handleDelLibrary(index,row._id)" shape="circle"></Button>
+        </Poptip>
       </template>
     </Table>
     <Modal v-model="openAddLibraryModal" width="400" @on-cancel="handleCancel">
@@ -63,7 +72,7 @@
           {
             title: '操作',
             slot: 'action',
-            width: '240'
+            width: '150'
           },
         ],
         librariesData: [],
@@ -118,12 +127,50 @@
         this.librariesData.push(newLibrary)
       },
       async getLibrariesData(){
-        this.librariesData = await this.$db.libraries.find()
+        this.librariesData = await this.$db.libraries.sort({created_at:-1}).find()
       },
       async getLibraryFiles(id){
-        this.filesData = await this.$db.filmsLibrary.find({library_id: id})
+        this.filesData = await this.$db.filmsLibrary.sort({created_at:-1}).find({library_id: id})
         console.log(this.filesData)
-      }
+      },
+      handleReloadFiles(){
+        this.$Modal.confirm({
+          title: '重新读取视频库',
+          content: '该操作会重新读取视频库内的文件',
+          okText: '添加',
+          onOk: async () => {
+            this.$Message.success({
+              background: true,
+              content: '已重新读取视频库'
+            });
+          },
+          onCancel: () => {
+            this.$Message.info({
+              background: true,
+              content: '已取消该操作'
+            })
+          }
+        })
+      },
+      handleAppendPlaylist(){
+        this.$Modal.confirm({
+          title: '添加至播放列表',
+          content: '该操作会将此视频库内的文件添加至播放列表中',
+          okText: '添加',
+          onOk: async () => {
+            this.$Message.success({
+              background: true,
+              content: '已添加至播放列表'
+            });
+          },
+          onCancel: () => {
+            this.$Message.info({
+              background: true,
+              content: '已取消该操作'
+            })
+          }
+        })
+      },
     },
     async mounted() {
       await this.getLibrariesData()

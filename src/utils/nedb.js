@@ -13,8 +13,8 @@ DB.prototype.limit = function (offset, limit) {
   this.limit = limit || 10
   return this
 }
-DB.prototype.sort = function(orderBy){
-  this.orderBy = orderBy
+DB.prototype.sort = function(orderby){
+  this.orderby = orderby
   return this
 }
 /**
@@ -26,8 +26,8 @@ DB.prototype.sort = function(orderBy){
 DB.prototype.find = function (query, select) {
   return new Promise((resolve, reject) => {
     let stmt = this.db.find(query || {})
-    if(this.orderBy !== undefined){
-      stmt.sort(this.orderBy)
+    if(this.orderby !== undefined){
+      stmt.sort(this.orderby)
     }
     if(this.offset !== undefined){
       stmt.skip(this.offset).limit(this.limit)

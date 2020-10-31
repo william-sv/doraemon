@@ -14,12 +14,14 @@ async function fetchList (){
     xmlMode: true
   })
   const tvListElem = $('.td2').get()
-  for (const elem of tvListElem) {
+  let created_at = (new Date()).getTime() //文件写入数据库时间 unix时间戳(毫秒数)
+  for (const elem of tvListElem.reverse()) {
     let name = $('a',elem).eq(1).text()
     let pid = ($('a',elem).eq(1).attr('href')).replace('viewtvplay-','').replace('.html','')
     let genre = $(elem).next().text()
     let status = $(elem).next().next().text() //连载状态：连载，完结
-    result.push({pid,name,genre,status})
+    created_at += 1
+    result.push({pid,name,genre,status,created_at})
   }
 
 

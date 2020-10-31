@@ -25,20 +25,22 @@ module.exports = {
       res.json({status: 200, msg: '该文件夹不存在', files: []})
     }
     const dirFiles = []
-    await readFileFromFolder(dirPath, dirFiles)
+    let created_at = (new Date()).getTime() //文件写入数据库时间 unix时间戳(毫秒数)
+    await readFileFromFolder(dirPath, dirFiles, created_at)
     res.json({status: 200, msg: '',files: dirFiles})
   }
 }
 
 // 读取文件
-async function readFileFromFolder(dirPath, dirFiles){
+async function readFileFromFolder(dirPath, dirFiles, created_at){
+  created_at += 1
   const usefulFiles = ['mp4','webm','ogg','mkv','avi','mov','asf','wmv','navi','3gp','flv','f4v','rmvb','hddvd','rm','rmvb']
   const files = fs.readdirSync(dirPath)
   files.forEach(function(item,index){
     const stat = fs.statSync(path.join(dirPath, item))
     if(stat.isDirectory()){
       const newDirPath = path.join(dirPath,item)
-      readFileFromFolder(newDirPath, dirFiles)
+      readFileFromFolder(newDirPath, dirFiles, created_at)
     } else {
       const SplitItem = item.split('.')
       const fileFormat = SplitItem[SplitItem.length - 1].toLowerCase()
@@ -57,7 +59,8 @@ async function readFileFromFolder(dirPath, dirFiles){
           absolutePath: path.join(dirPath,item),
           dirPath: dirPath,
           fileFormat: fileFormat,
-          fileSize: fileSize
+          fileSize: fileSize,
+          created_at: created_at
         })
       }
     }

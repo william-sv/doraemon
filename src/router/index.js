@@ -12,7 +12,7 @@ const routes = [
   {
     path: '/web/jp',
     name: 'WebFilms',
-    component: () => import(/* webpackChunkName: "web-jp" */ '../views/web/webPage.vue'),
+    component: () => import(/* webpackChunkName: "web-jp" */ '../views/web/jpPage.vue'),
   },
   {
     path: '/library',
