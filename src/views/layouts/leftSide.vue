@@ -56,6 +56,16 @@ export default {
               path: '/library',
             },
             {
+              name: '播放列表',
+              icon: 'ios-list-box-outline',
+              path: '/playlist',
+            },
+            {
+              name: '杂质词管理',
+              icon: 'ios-barcode-outline',
+              path: '/impurities',
+            },
+            {
               name: '关于',
               icon: 'ios-information-circle-outline',
               path: '/about',

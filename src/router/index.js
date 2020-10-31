@@ -20,6 +20,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/libraryPage.vue'),
   },
   {
+    path: '/playlist',
+    name: 'Playlist',
+    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/playlistPage.vue'),
+  },
+  {
+    path: '/impurities',
+    name: 'Impurities',
+    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/impuritiesPage.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')

@@ -1,7 +1,7 @@
 <template>
   <div class="files-table-wrap">
     <div class="files-table-item">
-      <Table border :columns="columns" size="small" :data="filesData.slice(0,10)">
+      <Table border :columns="columns" size="small" :data="filesList">
         <template slot-scope="{ row,index }" slot="name">
           <span class="file-name">{{ row.name }}</span>
         </template>
@@ -10,7 +10,7 @@
         </template>
       </Table>
     </div>
-    <div class="page-item" v-show="filesData.length > 15">
+    <div class="page-item" v-show="filesData.length > 10">
       <Page :total="pageTotal"  size="small" :current.sync="currentPageNum" @on-change="changePage"></Page>
     </div>
   </div>
@@ -38,26 +38,34 @@
             align: 'center'
           },
           {
-            title: '尺寸',
-            key: 'fileW_H',
-            width: 100,
-            align: 'center'
-          },
-          {
             title: '大小',
             key: 'fileSize',
             width: 100,
             align: 'center'
           }
         ],
-        filesData:[],
-        pageTotal: 10,
+        filesList:[],
+        pageTotal: 0,
         currentPageNum: 1,
+      }
+    },
+    props:{
+      filesData: {
+        type: Array,
+        default: function(){
+          return []
+        }
       }
     },
     methods: {
       changePage(){},
     },
+    watch: {
+      filesData: function(){
+        this.pageTotal = this.filesData.length
+        this.filesList = this.filesData.slice(0,10)
+      }
+    }
   }
 </script>
 

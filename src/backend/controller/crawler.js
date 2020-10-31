@@ -13,6 +13,5 @@ module.exports = {
         break
     }
     res.json({status: 200, data: result})
-    
   }
 }

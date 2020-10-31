@@ -1,7 +1,7 @@
-var IndexController = require('./controller/index')
-var VideoController = require('./controller/video')
-var CrawlerController = require('./controller/crawler')
-var FoldersController = require('./controller/folders')
+const IndexController = require('./controller/index')
+const VideoController = require('./controller/video')
+const CrawlerController = require('./controller/crawler')
+const FoldersController = require('./controller/folders')
 
 module.exports = function(app){
   app.get('/', IndexController.index)

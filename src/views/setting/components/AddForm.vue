@@ -42,15 +42,32 @@
           if(valid){
             this.$http.get('http://localhost:1221/folder?path=' + encodeURIComponent(this.addLibrary.dirPath)).then(async (response) => {
               const msg = response.data.msg
-              const filesData = response.data.files
+              let filesData = response.data.files
+              const filesCount = filesData.length
               if(msg.length > 0){
                 this.$Message.error('╮(￣▽￣)╭ ' + msg)
               }
-              const saveMsg = await this.saveData(filesData)
-              if(saveMsg === '保存失败'){
-                this.$Message.error('╮(￣▽￣)╭ 保存文件出现错误，请稍后从重试~')
+              // 存储视频库信息
+              const saveLibraries = await this.saveLibrariesData({name:this.addLibrary.name, dirPath: this.addLibrary.dirPath, filesCount: filesCount})
+              if(!saveLibraries){
+                this.$Message.error('╮(￣▽￣)╭ 保存文件时出现错误，请稍后从重试~')
+                return
+              }
+              if(filesCount > 0){
+                const library_id = saveLibraries._id
+                // 存储视频库内文件信息
+                filesData.forEach((item) => {
+                  item.library_id = library_id
+                })
+                const saveFilesStatus = await this.saveFilesData(filesData)
+                if(!saveFilesStatus){
+                  this.$Message.error('╮(￣▽￣)╭ 保存文件时出现错误，请稍后从重试~')
+                  return
+                }
               }
               this.$Message.success('视频库添加成功~')
+              this.$emit('pushNewLibrary', saveLibraries)
+              this.handleReset()
             }).catch((error) => {
               console.log(error)
               this.$Message.error('╮(￣▽￣)╭ 读取文件夹内文件出现错误，请稍后从重试~')
@@ -81,14 +98,17 @@
           console.log(error)
         })
       },
-      async saveData(data){
-        let msg = '保存成功'
-        this.$db.filmsLibrary.insert(data, (err,doc) => {
-          if(err){
-            msg = '保存失败'
-          }
-        })
-        return msg
+      async saveLibrariesData(data){
+        // 判断该地址是否已存在，如已存在则直接返回警告信息！
+        const checkFileExists  = await this.$db.libraries.findOne({dirPath: this.addLibrary.dirPath})
+        if(checkFileExists !== null){
+          this.$Message.warning('已存在该地址的视频库，请勿重复添加！')
+          return false
+        }
+        return await this.$db.libraries.insert(data)
+      },
+      async saveFilesData(data){
+        return await this.$db.filmsLibrary.insert(data)
       },
     }
   }
