@@ -19,7 +19,7 @@ db.filmsLibrary = databaseConnect(path.join(remote.app.getPath('userData'), '/fi
 db.libraries = databaseConnect(path.join(remote.app.getPath('userData'), '/libraries.db'))
 
 // 播放列表
-db.playlist = databaseConnect(path.join(remote.app.getPath('userData'), '/playlist.db'))
+db.playlistLibrary = databaseConnect(path.join(remote.app.getPath('userData'), '/playlist.db'))
 
 // 日剧缓存库
 db.JPTeleplayLibrary = databaseConnect(path.join(remote.app.getPath('userData'), '/JPTeleplayLibrary.db'))
@@ -27,6 +27,8 @@ db.JPTeleplayLibrary = databaseConnect(path.join(remote.app.getPath('userData'),
 // 美剧缓存库
 db.USTeleplayLibrary = databaseConnect(path.join(remote.app.getPath('userData'), '/USTeleplayLibrary.db'))
 
+// 杂质词
+db.impuritiesLibrary = databaseConnect(path.join(remote.app.getPath('userData'), '/impurities.db'))
 
 
 export default db

@@ -9,12 +9,19 @@ function DB(database){
   this.db = new Datastore(options)
 }
 DB.prototype.limit = function (offset, limit) {
-  this.offset = offset || 0
-  this.limit = limit || 10
+  this.offset = undefined
+  this.limit = undefined
+  if(offset && limit){
+    this.offset = offset
+    this.limit = limit
+  }
   return this
 }
 DB.prototype.sort = function(orderby){
-  this.orderby = orderby
+  this.orderby = undefined
+  if(orderby){
+    this.orderby = orderby
+  }
   return this
 }
 /**
@@ -39,6 +46,12 @@ DB.prototype.find = function (query, select) {
       if(err){
         return reject(err)
       }
+      /**
+       * 搜索完成后重置 offset、orderby、limit 否则会影响到下一次查询
+       * */
+      this.offset = undefined
+      this.orderby = undefined
+      this.limit = undefined
       resolve(docs)
     })
   })

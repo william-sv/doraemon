@@ -9,11 +9,11 @@
         <Poptip trigger="hover" content="查看视频库内文件" placement="top-end">
           <Button style="margin-right: 5px;" type="info" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)" shape="circle"></Button>
         </Poptip>
-        <Poptip trigger="hover" content="重新缓存视频库内文件" placement="top-end">
+        <Poptip trigger="hover" content="更新视频库" placement="top-end">
           <Button style="margin-right: 5px;" type="success" size="small" icon="md-refresh" @click="handleReloadFiles(row._id,row.name)" shape="circle"></Button>
         </Poptip>
         <Poptip trigger="hover" content="将视频库合并至播放列表" placement="top-end">
-          <Button style="margin-right: 5px;" type="primary" size="small" icon="ios-list-box" @click="handleAppendPlaylist(row._id,row.name)" shape="circle"></Button>
+          <Button style="margin-right: 5px;" type="primary" size="small" icon="ios-list-box" @click="handleAppendPlaylist(row._id)" shape="circle"></Button>
         </Poptip>
         <Poptip trigger="hover" content="删除视频库及缓存的文件" placement="top-end">
           <Button type="error" size="small" icon="ios-trash" @click="handleDelLibrary(index,row._id)" shape="circle"></Button>
@@ -114,12 +114,11 @@
         })
       },
       async handleViewFiles(id,name){
-        await this.getLibraryFiles(id)
+        this.filesData = await this.getLibraryFiles(id)
         this.viewLibraryFilesTitle = name
         this.openViewFilesModal = true
       },
       async deleteLibrary(id){
-        console.log(id)
         await this.$db.libraries.remove({_id: id})
         await this.$db.filmsLibrary.remove({library_id: id}, { multi: true }) // { multi: true } 允许删除多个文件
       },
@@ -130,18 +129,17 @@
         this.librariesData = await this.$db.libraries.sort({created_at:-1}).find()
       },
       async getLibraryFiles(id){
-        this.filesData = await this.$db.filmsLibrary.sort({created_at:-1}).find({library_id: id})
-        console.log(this.filesData)
+        return await this.$db.filmsLibrary.sort({created_at:-1}).find({library_id: id})
       },
       handleReloadFiles(){
         this.$Modal.confirm({
-          title: '重新读取视频库',
-          content: '该操作会重新读取视频库内的文件',
+          title: '更新视频库数据',
+          content: '该操作会更新视频库内的文件数据',
           okText: '添加',
           onOk: async () => {
             this.$Message.success({
               background: true,
-              content: '已重新读取视频库'
+              content: '视频库已更新'
             });
           },
           onCancel: () => {
@@ -152,12 +150,13 @@
           }
         })
       },
-      handleAppendPlaylist(){
+      handleAppendPlaylist(library_id){
         this.$Modal.confirm({
           title: '添加至播放列表',
           content: '该操作会将此视频库内的文件添加至播放列表中',
           okText: '添加',
           onOk: async () => {
+            await this.appendPlaylist(library_id)
             this.$Message.success({
               background: true,
               content: '已添加至播放列表'
@@ -170,6 +169,20 @@
             })
           }
         })
+      },
+      async appendPlaylist(library_id){
+        let filesData = await this.getLibraryFiles(library_id)
+        for (const item of filesData) {
+          let result = await this.$db.playlistLibrary.findOne({oldName: item.name,library_id: item.library_id})
+          if(!result){
+            await this.$db.playlist.insert({
+              name: item.name,
+              oldName: item.name,
+              library_id: item.library_id,
+              created_at: item.created_at,
+            })
+          }
+        }
       },
     },
     async mounted() {

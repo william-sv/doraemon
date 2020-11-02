@@ -51,7 +51,7 @@
               // 存储视频库信息
               const saveLibraries = await this.saveLibrariesData({name:this.addLibrary.name, dirPath: this.addLibrary.dirPath, filesCount: filesCount,created_at: created_at})
               if(!saveLibraries){
-                this.$Message.error('╮(￣▽￣)╭ 保存文件时出现错误，请稍后从重试~')
+                this.$Message.error('╮(￣▽￣)╭ 保存时出现错误，请稍后从重试~')
                 return
               }
               if(filesCount > 0){
@@ -59,6 +59,7 @@
                 let created_at = (new Date()).getTime() //文件写入时间 unix时间戳(毫秒数)
                 // 存储视频库内文件信息
                 filesData.forEach((item) => {
+                  created_at +=1
                   item.library_id = library_id
                   item.created_at = created_at
                 })

@@ -1,6 +1,6 @@
 <template>
-  <div class="film-wrap">
-    <Table border stripe height="600" size="small" :columns="columns" :data="filmsData">
+  <div class="file-wrap">
+    <Table border stripe height="550" size="small" :columns="columns" :data="filesData">
       <template slot-scope="{ row, index }" slot="status">
         <Tag color="green" v-if="row.status === '连载'">连载</Tag>
         <Tag color="red" v-else>完结</Tag>
@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: 'Films',
+  name: 'JPFiles',
   data(){
     return {
       columns: [
@@ -27,6 +27,11 @@ export default {
           width: '120'
         },
         {
+          title: '集数',
+          key: 'episode',
+          width: '80'
+        },
+        {
           title: '状态',
           slot: 'status',
           width: '90',
@@ -37,16 +42,18 @@ export default {
           width: '100',
         }
       ],
-      filmsList: [],
+      filesList: [],
     }
   },
   props: {
-    filmsData: {
+    filesData: {
       type: Array,
       default: function(){
         return []
       }
     }
+  },
+  methods: {
   },
 }
 </script>

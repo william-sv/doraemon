@@ -5,15 +5,17 @@
       <Button type="primary" icon="md-albums" size="small">生成合集</Button>
       <Button type="success" icon="md-refresh" size="small" style="margin-left: 10px;">更新播放列表</Button>
     </div>
-    <Table border ref="playlist" height="600" :columns="columns" size="small" :data="playlist" @on-select="handleSelection">
-
+    <Table ref="playlist" height="600" :columns="columns" size="small" :data="playlistData" @on-select="handleSelection">
+      <template slot-scope="{ row, index }" slot="action">
+        <Button type="error" size="small" icon="ios-trash" @click="handleDel(index,row._id)" shape="circle"></Button>
+      </template>
     </Table>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Playlist",
+    name: "PlaylistPage",
     data(){
       return {
         columns: [
@@ -27,44 +29,28 @@
             key: 'name',
           },
           {
-            title: '来源',
-            key: 'library'
+            title: '操作',
+            slot: 'action',
+            width: 120,
+            align: 'center'
           },
         ],
-        playlist: [
-          {
-            name: '女子美食汉堡部',
-            duration: '23:54',
-            absolutePath: ['/Users/will/movie/女子美食汉堡部.EP02.中日双语.1280X720.HDTVrip-幻月字幕组.mp4']
-          },
-          {
-            name: '女子美食汉堡部',
-            duration: '23:54',
-            absolutePath: ['/Users/will/movie/女子美食汉堡部.EP02.中日双语.1280X720.HDTVrip-幻月字幕组.mp4']
-          },
-          {
-            name: '女子美食汉堡部',
-            duration: '23:54',
-            absolutePath: ['/Users/will/movie/女子美食汉堡部.EP02.中日双语.1280X720.HDTVrip-幻月字幕组.mp4']
-          },
-          {
-            name: '女子美食汉堡部',
-            duration: '23:54',
-            absolutePath: ['/Users/will/movie/女子美食汉堡部.EP02.中日双语.1280X720.HDTVrip-幻月字幕组.mp4']
-          },
-          {
-            name: '女子美食汉堡部',
-            duration: '23:54',
-            absolutePath: ['/Users/will/movie/女子美食汉堡部.EP02.中日双语.1280X720.HDTVrip-幻月字幕组.mp4']
-          },
-        ],
+        playlistData: [],
       }
     },
     methods: {
       handleSelection(selection){
         console.log(selection)
       },
+      async fetchPlaylistData(){
+        return await this.$db.playlistLibrary.sort({created_at: -1}).find()
+      },
+      async handleDel(){},
     },
+    async created(){
+      this.playlistData = await this.fetchPlaylistData()
+      console.log(this.playlistData)
+    }
   }
 </script>
 
