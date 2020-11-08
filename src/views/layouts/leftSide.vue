@@ -88,11 +88,11 @@ export default {
 </script>
 <style lang="less" scoped>
   .left-side-wrap {
-    height: 100vh;
+    height: calc(100vh - 20px);
     background-color: #f8f8f9;
   }
   .menu-wrap {
-    padding-top: 20px;
+    padding-top: 10px;
   }
   .menu-group-title {
     padding-left: 10px;

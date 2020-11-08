@@ -10,7 +10,7 @@
           <Button style="margin-right: 5px;" type="info" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)" shape="circle"></Button>
         </Poptip>
         <Poptip trigger="hover" content="更新视频库" placement="top-end">
-          <Button style="margin-right: 5px;" type="success" size="small" icon="md-refresh" @click="handleReloadFiles(row._id,row.name)" shape="circle"></Button>
+          <Button style="margin-right: 5px;" type="success" size="small" icon="md-refresh" @click="handleReloadFiles(row._id,row.dirPath)" shape="circle"></Button>
         </Poptip>
         <Poptip trigger="hover" content="将视频库合并至播放列表" placement="top-end">
           <Button style="margin-right: 5px;" type="primary" size="small" icon="ios-list-box" @click="handleAppendPlaylist(row._id)" shape="circle"></Button>
@@ -131,12 +131,13 @@
       async getLibraryFiles(id){
         return await this.$db.filmsLibrary.sort({created_at:-1}).find({library_id: id})
       },
-      handleReloadFiles(){
+      handleReloadFiles(library_id,dirPath){
         this.$Modal.confirm({
           title: '更新视频库数据',
           content: '该操作会更新视频库内的文件数据',
           okText: '添加',
           onOk: async () => {
+            await this.compareFiles(dirPath,library_id)
             this.$Message.success({
               background: true,
               content: '视频库已更新'
@@ -173,16 +174,53 @@
       async appendPlaylist(library_id){
         let filesData = await this.getLibraryFiles(library_id)
         for (const item of filesData) {
-          let result = await this.$db.playlistLibrary.findOne({oldName: item.name,library_id: item.library_id})
+          let result = await this.$db.playlistLibrary.findOne({oldName: item.name,file_id: [item._id],library_id: item.library_id})
           if(!result){
-            await this.$db.playlist.insert({
-              name: item.name,
-              oldName: item.name,
+            let name = item.name.slice(0,item.name.lastIndexOf('.')) //去除后缀名
+            await this.$db.playlistLibrary.insert({
+              name: name,
+              oldName: name,
+              fileFormat: item.fileFormat,
               library_id: item.library_id,
               created_at: item.created_at,
+              file_id: item._id,
             })
           }
         }
+      },
+      async getDirFiles(dirPath){
+        let folderFiles
+        await this.$http.get('http://localhost:1221/folder?path=' + encodeURIComponent(dirPath)).then((response) => {
+          const msg = response.data.msg
+          let filesData = response.data.files
+          if(msg.length > 0){
+            this.$Message.error('╮(￣▽￣)╭ ' + msg)
+          }
+          folderFiles = filesData
+        })
+        return folderFiles
+      },
+      async compareFiles(dirPath,library_id){
+        let folderFiles = []
+        let libraryFiles = []
+        let libraryFilesData = []
+        let removeFiles = []
+        let addFiles = []
+        folderFiles = await this.getDirFiles(dirPath)
+        libraryFiles = await this.getLibraryFiles(library_id)
+        libraryFiles.forEach((item) => {
+          libraryFilesData[item.name] = item
+        })
+        folderFiles.forEach((item) => {
+          if(libraryFilesData.hasOwnProperty(item.name)){
+            libraryFiles.splice(item,1)
+          } else {
+            addFiles.push(item)
+          }
+        })
+        removeFiles = libraryFiles
+        console.log(addFiles)
+        console.log(removeFiles)
       },
     },
     async mounted() {

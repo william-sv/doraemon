@@ -11,8 +11,8 @@
       <Row>
         <Scroll :on-reach-bottom="handleLoadingFiles" height="600">
           <Col :sm="4" :xl="4" :xxl="2" v-for="film in playlist" :key="film._id">
-            <div class="film-item" @click="handlePlayFilm(film.absolutePath)">
-              <div class="film-poster-item" :style="{ backgroundImage: film.poster != '' ? 'url(' + film.poster + ') ' : 'url(' + require('../../assets/no_poster.png') + ')' }">
+            <div class="film-item" @click="handlePlayFilm(film.file_id)">
+              <div class="film-poster-item" :style="{ backgroundImage: (film.poster && film.poster !== '') ? 'url(' + film.poster + ') ' : 'url(' + require('../../assets/no_poster.png') + ')' }">
                 <img :src="require('../../assets/play.png')" class="film-play-btn">
               </div>
               <div class="film-name">
@@ -117,6 +117,7 @@ export default {
         },
       ],
       playlist: [],
+      pageNum: 0,
     }
   },
   components: {
@@ -126,9 +127,19 @@ export default {
     handleScreening(item){
       console.log(item.name)
     },
-    handleLoadingFiles(){},
-    handlePlayFilm(filmPath){
-      filmPath = '/Users/will/movie/出师表第01-02集_2.mp4'
+    async handleLoadingFiles(){
+      let result = []
+      result = await this.getPlaylistData(this.pageNum, (this.pageNum + 1) * 18)
+      if(result && result.length > 0){
+        this.playlist.push.apply(this.playlist, result)
+        this.pageNum = this.pageNum + 1
+      } else {
+        return
+      }
+    },
+    async handlePlayFilm(id){
+      let filmPath = await this.getFilmPath(id)
+      // filmPath = '/Users/will/movie/出师表第01-02集_2.mp4'
       this.showFilmPlayArea = true
       if(filmPath !== ''){
         this.$refs.playFilm.handleStartPlay({filmPath: filmPath})
@@ -164,13 +175,24 @@ export default {
         })
       })
     },
-    async getPlaylistData(){
-      return await this.$db.playlistLibrary.sort({created_at: -1}).limit(2,2).find()
+    async getPlaylistData(offset,limit){
+      return await this.$db.playlistLibrary.sort({created_at: -1}).limit(offset,limit).find()
+    },
+    async getFilmPath(id){
+      let filmPath = ''
+      const result = await this.$db.filmsLibrary.findOne({_id: id})
+      console.log(result)
+      if(result.hasOwnProperty('absolutePath')){
+        filmPath = result.absolutePath
+      }
+      console.log(filmPath)
+      return filmPath
     },
   },
   async created(){
-    this.playlist = await this.getPlaylistData()
-    console.log(this.playlist)
+    this.pageNum = 0
+    this.playlist = await this.getPlaylistData(this.pageNum,(this.pageNum + 1) * 18)
+    this.pageNum = this.pageNum + 1
     // 读取分类数据
     // await this.fetchGenres()
     // 如果分类数据为空，则初始化分类数据，再重新读取
@@ -189,6 +211,11 @@ export default {
     display: block;
     margin: 5px 0;
     text-align: center;
+  }
+  .mask-wrap {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255,255,255,1);
   }
   // .playlist-item {
   //   margin-top: 20px;
@@ -213,8 +240,10 @@ export default {
   .play-item {
     display: block;
     position: fixed;
-    width: 700px;
-    height: 400px;
+    //width: 700px;
+    //height: 400px;
+    width: 100vw;
+    height: 100vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -225,9 +254,9 @@ export default {
   }
   .close-btn {
     position: fixed;
-    right: 10px;
-    transform: translate(-10px, -10px);
-    margin-top: 20px;
+    right: 19%;
+    transform: translate(-50%, -50%);
+    margin-top: 27%;
     z-index: 1001;
   }
 </style>

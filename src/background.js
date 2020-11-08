@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV === 'production'  // 默认为 process.env.NODE_ENV !== 'production' 但是这样的话 electron:serve 时会显示空白，不会展示页面！
@@ -18,7 +18,10 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1020,
-    height: 749,
+    height: 850,
+    transparent: false, // 无框窗口透明
+    frame: false, //取消window自带的关闭最小化等
+    resizable: false, //禁止改变主窗口尺寸
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -61,6 +64,14 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('window-mini', () => {
+  win.minimize()
+})
+ipcMain.on('window-close', () => {
+  win.close()
+})
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -17,6 +17,6 @@ export default {
 </script>
 <style lang="less" scoped>
   .main-wrap {
-    margin: 20px;
+    margin: 10px 20px;
   }
 </style>
