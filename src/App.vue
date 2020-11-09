@@ -22,6 +22,7 @@
   import LeftSide from './views/layouts/leftSide'
   import Main from './views/layouts/main'
   const ipcRenderer = require('electron').ipcRenderer
+  import {mapActions} from 'vuex'
   export default {
     name: 'app',
     components: {
@@ -35,7 +36,29 @@
       handleWindowClose(){
         ipcRenderer.send('window-close')
       },
+      async getData(){
+        const films = await this.$db.filmsLibrary.sort({created_at: -1}).find()
+        const playlist = await this.$db.playlistLibrary.sort({created_at: -1}).find()
+        const impurities = await this.$db.impuritiesLibrary.sort({created_at: -1}).find()
+        const genres = await this.$db.genres.sort({created_at: -1}).find()
+        const libraries = await this.$db.libraries.sort({created_at: -1}).find()
+        this.setFilms(films)
+        this.setPlaylist(playlist)
+        this.setImpurities(impurities)
+        this.setGenres(genres)
+        this.setLibraries(libraries)
+      },
+      ...mapActions('BasicLibrary', [
+          'setFilms',
+          'setPlaylist',
+          'setGenres',
+          'setImpurities',
+          'setLibraries',
+      ])
     },
+    async created(){
+      await this.getData()
+    }
   }
 </script>
 
