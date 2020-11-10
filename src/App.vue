@@ -42,11 +42,13 @@
         const impurities = await this.$db.impuritiesLibrary.sort({created_at: -1}).find()
         const genres = await this.$db.genres.sort({created_at: -1}).find()
         const libraries = await this.$db.libraries.sort({created_at: -1}).find()
+        const jp = await this.$db.JPTeleplayLibrary.sort({created_at: -1}).find()
         this.setFilms(films)
         this.setPlaylist(playlist)
         this.setImpurities(impurities)
         this.setGenres(genres)
         this.setLibraries(libraries)
+        this.setJP(jp)
       },
       ...mapActions('BasicLibrary', [
           'setFilms',
@@ -54,6 +56,7 @@
           'setGenres',
           'setImpurities',
           'setLibraries',
+          'setJP'
       ])
     },
     async created(){

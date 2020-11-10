@@ -1,6 +1,9 @@
 <template>
   <div class="web-files-wrap">
     <h3 style="text-align: center;margin-bottom: 10px;">追新番日剧</h3>
+    <div style="display: flex;justify-content: flex-end;margin-bottom: 10px;">
+      <Button  type="success" size="small" icon="md-refresh">刷新</Button>
+    </div>
     <div class="web-tips">
       <Alert>日剧资源主要来自 追新番 （http://www.zhuixinfan.com/main.php）</Alert>
     </div>
@@ -11,7 +14,7 @@
 </template>
 <script>
 import Files from './components/JPFiles'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'JP',
   data(){
@@ -53,14 +56,21 @@ export default {
     },
   },
   async created() {
-    this.filesData = await this.getJPTeleplayLibrary()
+    // this.filesData = await this.getJPTeleplayLibrary()
+    this.filesData = this.jp
+    console.log()
 
   },
-  async mounted(){
-    if(this.filesData.length === 0){
-      await this.getFilmsData()
-    }
-  }
+  computed: {
+    ...mapGetters('BasicLibrary',[
+      'jp',
+    ])
+  },
+  // async mounted(){
+  //   if(this.filesData.length === 0){
+  //     await this.getFilmsData()
+  //   }
+  // }
 }
 </script>
 <style lang="less" scoped>

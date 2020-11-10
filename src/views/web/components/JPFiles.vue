@@ -1,6 +1,6 @@
 <template>
   <div class="file-wrap">
-    <Table border stripe height="550" size="small" :columns="columns" :data="filesData">
+    <Table border stripe height="650" size="small" :columns="columns" :data="filesData">
       <template slot-scope="{ row, index }" slot="status">
         <Tag color="green" v-if="row.status === '连载'">连载</Tag>
         <Tag color="red" v-else>完结</Tag>

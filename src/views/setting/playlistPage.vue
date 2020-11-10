@@ -2,11 +2,11 @@
   <div class="playlist-wrap">
     <h3 style="text-align: center;margin-bottom: 10px;">播放列表</h3>
     <div class="playlist-btn">
-      <Input v-model="searchValue" search enter-button size="small" placeholder="检索" style="width:250px" @on-search="handleSearch" />
+      <Input v-model="searchValue" search enter-button size="small" placeholder="检索" style="width:250px" @on-search="handleSearch" @on-change="changeSearchValue" />
       <Button type="primary" icon="md-albums" size="small" style="margin-left: 10px;" @click="handleCreateGroup">生成合集</Button>
 <!--      <Button type="success" icon="md-refresh" size="small" style="margin-left: 10px;">更新播放列表</Button>-->
     </div>
-    <Table ref="playlist" height="600" :columns="columns" size="small" :data="playlistData" @on-select="handleSelection" @on-select-all="handleSelection">
+    <Table border ref="playlist" height="700" :columns="columns" size="small" :data="playlistData" @on-select="handleSelection" @on-select-all="handleSelection">
       <template slot-scope="{ row, index }" slot="action">
         <Button type="success" size="small" icon="md-swap" @click="handleTransformFormat(index,row._id)" shape="circle"></Button>
         <Button style="margin-left: 5px;" type="error" size="small" icon="ios-trash" @click="handleDel(index,row._id)" shape="circle"></Button>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     name: "Playlist",
     data(){
@@ -85,15 +86,45 @@
 
       },
       async handleSearch(value){
-        const result = await this.$db.playlistLibrary.find({name: { $regex: new RegExp(value) }})
-        console.log(result)
+        const filter = value
+        if(filter === ''){
+          this.playlistData = this.playlist
+        } else{
+          const filterData = this.playlist.filter((item) => {
+            if(item.name.indexOf(filter) !== -1){
+              return item
+            }
+          })
+          this.playlistData = filterData.length > 0 ? filterData : this.playlist
+        }
+      },
+      changeSearchValue(e){
+        const filter = e.data
+        if(filter === '' || filter === null){
+          this.playlistData = this.playlist
+        } else {
+          const filterData = this.playlist.filter((item) => {
+            if(item.name.indexOf(filter) !== -1){
+              return item
+            }
+          })
+          this.playlistData = filterData.length > 0 ? filterData : this.playlist
+        }
+
       },
       handleTransformFormat(){
 
       },
+
     },
-    async created(){
-      this.playlistData = await this.fetchPlaylistData()
+    computed: {
+      ...mapGetters('BasicLibrary',[
+          'playlist',
+      ])
+    },
+    created(){
+      // this.playlistData = await this.fetchPlaylistData()
+      this.playlistData = this.playlist
 
     },
   }

@@ -4,6 +4,7 @@ const state = {
   impurities: [],
   libraries: [],
   films: [],
+  jp: [],
 }
 const mutations = {
   SET_PLAYLIST: (state,playlist) => {
@@ -20,6 +21,9 @@ const mutations = {
   },
   SET_FILMS: (state,films) => {
     state.films = films
+  },
+  SET_JP: (state,jp) => {
+    state.jp = jp
   },
 }
 const actions = {
@@ -38,6 +42,9 @@ const actions = {
   setFilms({commit,state},films){
     commit('SET_FILMS',films)
   },
+  setJP({commit,state},jp){
+    commit('SET_JP',jp)
+  },
 }
 const getters = {
   playlist: (state) => {
@@ -54,6 +61,9 @@ const getters = {
   },
   films: (state) => {
     return state.films
+  },
+  jp: (state) => {
+    return state.jp
   },
 
 }

@@ -1,11 +1,11 @@
 <template>
   <div class="impurities-wrap">
     <h3 style="text-align: center;margin-bottom: 10px;">文件名杂质词</h3>
-    <Alert show-icon>杂质词主要用于在生成播放列表时对文件标题进行过滤，删除一些杂质词。该操作不会对您的文件产生任何影响~</Alert>
     <div style="display: flex;justify-content: flex-end;margin-bottom: 10px;">
       <Button type="primary" size="small" icon="ios-funnel" @click="handleExecuteImpurity">立即过滤</Button>
       <Button style="margin-left: 10px;" type="success" size="small" icon="md-add" @click="handleAddNewImpurity">新增</Button>
     </div>
+    <Alert show-icon>杂质词主要用于在生成播放列表时对文件标题进行过滤，删除一些杂质词。该操作不会对您的文件产生任何影响~</Alert>
     <div class="impurities-items" v-if="impuritiesData && impuritiesData.length > 0">
       <Tag closable @on-close="handleDel(index,item._id,item.impurity)" v-for="(item,index) in impuritiesData" :key="item._id" style="margin: 0 10px 10px 0;">{{ item.impurity }}</Tag>
     </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     name: "Impurities",
     data(){
@@ -107,8 +108,13 @@
         }
       },
     },
-    async created() {
-      await this.getImpurities()
+    computed: {
+      ...mapGetters('BasicLibrary',[
+        'impurities',
+      ])
+    },
+    created() {
+      this.impuritiesData = this.impurities
     }
   }
 </script>

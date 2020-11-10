@@ -4,7 +4,7 @@
     <div style="display: flex;justify-content: flex-end;margin-bottom: 10px;">
       <Button  type="success" size="small" icon="md-add" @click="openAddLibraryModal = true">新增</Button>
     </div>
-    <Table border stripe height="600" size="small" :columns="columns" :data="librariesData">
+    <Table border stripe height="700" size="small" :columns="columns" :data="librariesData">
       <template slot-scope="{ row, index }" slot="action">
         <Poptip trigger="hover" content="查看视频库内文件" placement="top-end">
           <Button style="margin-right: 5px;" type="info" size="small" icon="ios-eye" @click="handleViewFiles(row._id,row.name)" shape="circle"></Button>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import AddForm from "@/views/setting/components/AddForm"
   import FilesTable from "@/views/setting/components/FilesTable"
   export default {
@@ -223,8 +224,17 @@
         console.log(removeFiles)
       },
     },
-    async mounted() {
-      await this.getLibrariesData()
+    computed: {
+      ...mapGetters('BasicLibrary',[
+        'libraries',
+        'films'
+      ])
+    },
+    // async mounted() {
+    //   await this.getLibrariesData()
+    // },
+    created(){
+      this.librariesData = this.libraries
     }
   }
 </script>
