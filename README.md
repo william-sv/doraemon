@@ -4,6 +4,7 @@
 
 #### 使用技术栈
 - 主程序：Electron框架
+- Build Tool：electron-builder
 - 前端框架：Vue 2.0
 - 前端UI组件库：View UI
 - 视频播放器：xgplayer
