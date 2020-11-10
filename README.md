@@ -13,6 +13,9 @@
 - 资源下载：aria2
 - 视频转码：ffmpeg
 
+#### Demo图
+![image](https://github.com/william-sv/doraemon/blob/master/doc/demo.png)
+
 #### 实现功能
 - [x] 播放本地视频文件
   - [ ] ffmpeg转码
