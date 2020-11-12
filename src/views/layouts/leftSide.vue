@@ -3,7 +3,7 @@
     <div class="menu-wrap">
       <div v-for="menu in menus">
         <span class="menu-group-title">{{ menu.name }}</span>
-        <div class="menu-item" v-for="item in menu.children" @click="jumpTo(item.path)">
+        <div :class="['menu-item', item.path === activePath ? 'menu-active' : '']" v-for="item in menu.children" @click="jumpTo(item.path)">
           <Icon :type="item.icon" />
           <span class="menu-item-title">{{item.name}}</span>
         </div>
@@ -16,6 +16,7 @@ export default {
   name: 'LeftSide',
   data(){
     return {
+      activePath: '/local',
       menus: [
         {
           name: '本地资源',
@@ -78,6 +79,7 @@ export default {
   methods: {
     jumpTo(path){
       if (this.$route.path !== path && path !== '') {
+        this.activePath = path
         this.$router.push({
           path: path
         })
@@ -88,7 +90,7 @@ export default {
 </script>
 <style lang="less" scoped>
   .left-side-wrap {
-    height: calc(100vh - 20px);
+    height: calc(100vh - 25px);
     background-color: #f8f8f9;
   }
   .menu-wrap {
@@ -105,7 +107,7 @@ export default {
       align-items: center;
       justify-content: start;
       padding-left: 10px;
-      margin: 10px;
+      margin: 10px 20px 10px 10px;
       border-radius: 10px;
   }
   .menu-item-title {
@@ -113,8 +115,12 @@ export default {
     margin-left: 10px;
   }
   .menu-item:hover {
-    background-color: #2d8cf0;
-    color: #ffffff;
+    //background-color: #2d8cf0;
+    color: #5cadff;
+  }
+  .menu-active {
+    background-color: rgba(92,173,256,.2);
+    color: #5cadff;
   }
   
 </style>

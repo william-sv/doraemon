@@ -69,6 +69,7 @@ ipcMain.on('window-mini', () => {
   win.minimize()
 })
 ipcMain.on('window-close', () => {
+
   win.close()
 })
 

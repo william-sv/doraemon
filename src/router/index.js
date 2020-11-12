@@ -1,5 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import LocalFilms from '../views/local/localPage.vue'
+import JPFilms from '../views/web/jpPage.vue'
+import Library from '../views/setting/libraryPage.vue'
+import Playlist from '../views/setting/playlistPage.vue'
+import Impurities from '../views/setting/impuritiesPage.vue'
+import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
@@ -7,32 +13,32 @@ const routes = [
   {
     path: '/local',
     name: 'LocalFilms',
-    component: () => import(/* webpackChunkName: "local-page" */ '../views/local/localPage.vue'),
+    component: LocalFilms
   },
   {
     path: '/web/jp',
-    name: 'WebFilms',
-    component: () => import(/* webpackChunkName: "web-jp" */ '../views/web/jpPage.vue'),
+    name: 'JPFilms',
+    component: JPFilms
   },
   {
     path: '/library',
     name: 'Library',
-    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/libraryPage.vue'),
+    component: Library
   },
   {
     path: '/playlist',
     name: 'Playlist',
-    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/playlistPage.vue'),
+    component: Playlist
   },
   {
     path: '/impurities',
     name: 'Impurities',
-    component: () => import(/* webpackChunkName: "library-page" */ '../views/setting/impuritiesPage.vue'),
+    component: Impurities
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About
   },
 ]
 

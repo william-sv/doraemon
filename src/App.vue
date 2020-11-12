@@ -2,7 +2,7 @@
   <div id="app">
     <div class="action-bar">
       <Icon size="16" style="display:inline-block;color: rgba(253,191,65,1);margin-left: 10px;-webkit-app-region: no-drag" type="ios-remove-circle" @click="handleWindowMini" />
-      <Icon size="16" style="display:inline-block;color: rgba(255,99,94,1);margin-left: 5px;-webkit-app-region: no-drag" type="ios-close-circle" @click="handleWindowClose" />
+      <Icon size="16" style="display:inline-block;color: rgba(255,99,94,1);margin-left: 10px;-webkit-app-region: no-drag" type="ios-close-circle" @click="handleWindowClose" />
     </div>
     <div class="content-wrap">
       <Row>
@@ -16,6 +16,7 @@
         </Col>
       </Row>
     </div>
+    <Spin fix v-if="spinShow"></Spin>
   </div>
 </template>
 <script>
@@ -25,6 +26,11 @@
   import {mapActions} from 'vuex'
   export default {
     name: 'app',
+    data(){
+      return {
+        spinShow: false,
+      }
+    },
     components: {
       LeftSide,
       Main,
@@ -34,6 +40,8 @@
         ipcRenderer.send('window-mini')
       },
       handleWindowClose(){
+        // 保存数据
+        // 关闭
         ipcRenderer.send('window-close')
       },
       async getData(){
@@ -60,7 +68,12 @@
       ])
     },
     async created(){
+      this.spinShow = true
       await this.getData()
+      this.spinShow = false
+    },
+    mounted() {
+      this.$router.push('/local')
     }
   }
 </script>
@@ -71,7 +84,9 @@
   height: 100vh;
 }
 .action-bar {
-  height: 20px;
+  display: flex;
+  align-items: center;
+  height: 25px;
   width: 100vw;
   background-color: rgba(0,0,0,.1);
   -webkit-app-region: drag;
