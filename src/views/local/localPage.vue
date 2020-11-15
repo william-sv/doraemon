@@ -7,20 +7,18 @@
         </Col>
       </Row>
     </div>
-    <div class="playlist-item">
-      <Row>
-        <Scroll :on-reach-bottom="handleLoadingFiles" height="600">
-          <Col :sm="4" :xl="4" :xxl="2" v-for="film in playlist" :key="film._id">
-            <div class="film-item" @click="handlePlayFilm(film.file_id)">
-              <div class="film-poster-item" :style="{ backgroundImage: (film.poster && film.poster !== '') ? 'url(' + film.poster + ') ' : 'url(' + require('../../assets/no_poster.png') + ')' }">
-                <img :src="require('../../assets/play.png')" class="film-play-btn">
-              </div>
-              <div class="film-name">
-                {{ film.name.slice(0,15) }}
-              </div>
+    <div>
+      <Row class="playlist-item">
+        <Col :span="4" v-for="film in playlist">
+          <div class="film-item" @click="handlePlayFilm(film.file_id)">
+            <div class="film-poster-item" :style="{ backgroundImage: (film.poster && film.poster !== '') ? 'url(' + film.poster + ') ' : 'url(' + require('../../assets/no_poster.png') + ')' }">
+              <img :src="require('../../assets/play.png')" class="film-play-btn">
             </div>
-          </Col>
-        </Scroll>
+            <div class="film-name">
+              {{ film.name.slice(0,15) }}
+            </div>
+          </div>
+        </Col>
       </Row>
     </div>
     <div class="play-item" v-show="showFilmPlayArea">
@@ -31,7 +29,7 @@
 </template>
 <script>
 import PlayFilm from '../../components/PlayFilm'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'LocalPlaylist',
   data(){
@@ -116,8 +114,6 @@ export default {
           name: '武侠'
         },
       ],
-      playlist: [],
-      pageNum: 0,
     }
   },
   components: {
@@ -127,19 +123,8 @@ export default {
     handleScreening(item){
       console.log(item.name)
     },
-    async handleLoadingFiles(){
-      let result = []
-      result = await this.getPlaylistData(this.pageNum, (this.pageNum + 1) * 18)
-      if(result && result.length > 0){
-        this.playlist.push.apply(this.playlist, result)
-        this.pageNum = this.pageNum + 1
-      } else {
-        return
-      }
-    },
     async handlePlayFilm(id){
       let filmPath = await this.getFilmPath(id)
-      // filmPath = '/Users/will/movie/出师表第01-02集_2.mp4'
       this.showFilmPlayArea = true
       if(filmPath !== ''){
         this.$refs.playFilm.handleStartPlay({filmPath: filmPath})
@@ -189,17 +174,10 @@ export default {
       return filmPath
     },
   },
-  async created(){
-    this.pageNum = 0
-    this.playlist = await this.getPlaylistData(this.pageNum,(this.pageNum + 1) * 18)
-    this.pageNum = this.pageNum + 1
-    // 读取分类数据
-    // await this.fetchGenres()
-    // 如果分类数据为空，则初始化分类数据，再重新读取
-    // if(this.genres.length === 0){
-    //   await this.initGenre()
-    //   await this.fetchGenres()
-    // }
+  computed: {
+    ...mapGetters('BasicLibrary',[
+      'playlist',
+    ])
   },
 }
 </script>
@@ -217,9 +195,11 @@ export default {
     height: 100vh;
     background-color: rgba(255,255,255,1);
   }
-  // .playlist-item {
-  //   margin-top: 20px;
-  // }
+   .playlist-item {
+     //margin-top: 20px;
+     height: 650px;
+     overflow-y: scroll;
+   }
   .film-item {
     margin-bottom: 20px;
     cursor:pointer;

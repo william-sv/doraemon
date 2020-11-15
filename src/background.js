@@ -3,7 +3,7 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-const isDevelopment = process.env.NODE_ENV === 'production'  // 默认为 process.env.NODE_ENV !== 'production' 但是这样的话 electron:serve 时会显示空白，不会展示页面！
+const isDevelopment = process.env.NODE_ENV !== 'production'  // 默认为 process.env.NODE_ENV !== 'production' 但是这样的话 electron:serve 时会显示空白，不会展示页面！
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

@@ -101,14 +101,15 @@ export default {
     color: #808695;
   }
   .menu-item {
-      display: flex;
-      height: 30px;
-      text-align: center;
-      align-items: center;
-      justify-content: start;
-      padding-left: 10px;
-      margin: 10px 20px 10px 10px;
-      border-radius: 10px;
+    display: flex;
+    height: 30px;
+    text-align: center;
+    align-items: center;
+    justify-content: start;
+    padding-left: 10px;
+    margin: 10px 20px 10px 10px;
+    border-radius: 10px;
+    cursor:pointer;
   }
   .menu-item-title {
     display: inline-block;

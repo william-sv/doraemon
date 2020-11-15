@@ -12,17 +12,17 @@
         <Button style="margin-left: 5px;" type="error" size="small" icon="ios-trash" @click="handleDel(index,row._id)" shape="circle"></Button>
       </template>
     </Table>
-    <Modal v-model="openCreateGroupModal" width="460">
+    <Modal v-model="openCreateGroupModal" width="500">
       <p slot="header" style="text-align:center">
         <span>生成合集</span>
       </p>
       <div>
         合集名称：<Input clas="group-name" v-model="groupName" style="display: inline-block;width: 350px;" placeholder="请输入合集名称" />
         <div style="margin-top: 10px;">
-          合集内容：<span style="display: inline-block;font-size: 12px;">包含 {{ selectionValue.length }} 个内容</span>
-          <div @drop="drop($event)" @dragover="allowDrop($event)" style="height: 150px;background-color: #f8f8f9;">
-            <span class="group-item" :id="'span' + index" v-for="(item,index)  in selectionValue" @dragstart="drag($event)" draggable="true">{{ item.name }}</span>
-          </div>
+          合集内容：<span style="display: inline-block;font-size: 12px;">包含 {{ selectionValue.length }} 个内容；<span style="color:red;">tips:拖动名字进行排序</span></span>
+          <draggable v-model="selectionValue" style="min-height: 150px;max-height: 400px;overflow-y: scroll;">
+            <div class="group-item" v-for="item  in selectionValue" :key="item._id">{{ item.name }}</div>
+          </draggable>
         </div>
       </div>
       <div slot="footer">
@@ -34,6 +34,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import draggable from 'vuedraggable'
   export default {
     name: "Playlist",
     data(){
@@ -66,6 +67,9 @@
         playlistData: [],
         selectionValue: []
       }
+    },
+    components: {
+      draggable
     },
     methods: {
       handleSelection(selection){
@@ -136,27 +140,6 @@
       handleTransformFormat(){
 
       },
-      allowDrop(ev){
-        ev.preventDefault()
-      },
-      drag(ev){
-        ev.dataTransfer.setData('Text',ev.target.id)
-
-      },
-      drop(ev){
-        console.log(this.selectionValue)
-        ev.preventDefault()
-        const elTargetId = ev.dataTransfer.getData('Text')
-        console.log(ev)
-        ev.target.appendChild(document.getElementById(elTargetId))
-        let newSort = []
-        const newList = document.getElementsByClassName('group-item')
-        newList.forEach((item) => {
-          newSort.push((item.id).replace('span', ''))
-        })
-        console.log(newSort)
-
-      },
     },
     computed: {
       ...mapGetters('BasicLibrary',[
@@ -192,12 +175,15 @@
     margin: 10px 0;
   }
   .group-item {
-    display: block;
-    margin:5px 0 5px 10px;
-    padding-left:5px;
-    font-size: 13px;
+    display: flex;
+    align-items: center;
     width: 100%;
-    height: 15px;
+    height: 30px;
+    background-color: #f8f8f9;
+    margin:5px 0 5px 10px;
+    padding-left: 10px;
+    font-size: 13px;
+    cursor:pointer;
   }
 
 </style>
