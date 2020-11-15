@@ -20,7 +20,9 @@
         合集名称：<Input clas="group-name" v-model="groupName" style="display: inline-block;width: 350px;" placeholder="请输入合集名称" />
         <div style="margin-top: 10px;">
           合集内容：<span style="display: inline-block;font-size: 12px;">包含 {{ selectionValue.length }} 个内容</span>
-          <span v-for=" item in selectionValue" style="display: block;margin:5px 0 5px 10px;font-size: 13px;">{{ item.name }}</span>
+          <div @drop="drop($event)" @dragover="allowDrop($event)" style="height: 150px;background-color: #f8f8f9;">
+            <span class="group-item" :id="'span' + index" v-for="(item,index)  in selectionValue" @dragstart="drag($event)" draggable="true">{{ item.name }}</span>
+          </div>
         </div>
       </div>
       <div slot="footer">
@@ -68,7 +70,6 @@
     methods: {
       handleSelection(selection){
         this.selectionValue = selection
-        console.log(selection)
       },
       async fetchPlaylistData(){
         return await this.$db.playlistLibrary.sort({created_at: -1}).find()
@@ -82,8 +83,29 @@
           this.openCreateGroupModal = true
         }
       },
-      createGroup(){
-
+      async createGroup(){
+        let group = []
+        const selected = this.selectionValue
+        for (const item of selected) {
+          group.push({
+            name: item.name,
+            oldName: item.oldName,
+            fileFormat: item.fileFormat,
+            library_id: item.library_id,
+            file_id: item._id
+          })
+        }
+        console.log(group)
+        // await this.$db.playlistLibrary.insert({
+        //   name: this.groupName,
+        //   oldName: this.groupName,
+        //   fileFormat: '',
+        //   library_id: '',
+        //   created_at: '',
+        //   file_id: '',
+        //   status: 2,
+        //   group:group,
+        // })
       },
       async handleSearch(value){
         const filter = value
@@ -110,12 +132,31 @@
           })
           this.playlistData = filterData.length > 0 ? filterData : this.playlist
         }
-
       },
       handleTransformFormat(){
 
       },
+      allowDrop(ev){
+        ev.preventDefault()
+      },
+      drag(ev){
+        ev.dataTransfer.setData('Text',ev.target.id)
 
+      },
+      drop(ev){
+        console.log(this.selectionValue)
+        ev.preventDefault()
+        const elTargetId = ev.dataTransfer.getData('Text')
+        console.log(ev)
+        ev.target.appendChild(document.getElementById(elTargetId))
+        let newSort = []
+        const newList = document.getElementsByClassName('group-item')
+        newList.forEach((item) => {
+          newSort.push((item.id).replace('span', ''))
+        })
+        console.log(newSort)
+
+      },
     },
     computed: {
       ...mapGetters('BasicLibrary',[
@@ -123,7 +164,6 @@
       ])
     },
     created(){
-      // this.playlistData = await this.fetchPlaylistData()
       this.playlistData = this.playlist
 
     },
@@ -150,6 +190,14 @@
     display: flex;
     justify-content: flex-end;
     margin: 10px 0;
+  }
+  .group-item {
+    display: block;
+    margin:5px 0 5px 10px;
+    padding-left:5px;
+    font-size: 13px;
+    width: 100%;
+    height: 15px;
   }
 
 </style>

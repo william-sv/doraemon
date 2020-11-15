@@ -8,26 +8,26 @@
       <Alert>日剧资源主要来自 追新番 （http://www.zhuixinfan.com/main.php）</Alert>
     </div>
     <div class="file-wrap">
-      <Table :loading="loading" border stripe height="650" size="small" :columns="columns" :data="filesData">
+      <Table :loading="loading" border stripe height="650" size="small" :columns="columns" :data="jp">
         <template slot-scope="{ row, index }" slot="status">
           <Tag color="green" v-if="row.status === '连载'">连载</Tag>
           <Tag color="red" v-else>完结</Tag>
         </template>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" icon="ios-cloud-download-outline">下载</Button>
+          <Button type="success" size="small" icon="ios-cloud-download" shape="circle"></Button>
         </template>
       </Table>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import FilmTable from "@/views/web/components/FilmTable"
+import { mapGetters,mapActions } from 'vuex'
 export default {
   name: 'JPFilms',
   data(){
     return {
-      filesData: [],
-      loading: false,
+      // filesData: [],
       columns: [
         {
           title: '剧名',
@@ -41,19 +41,23 @@ export default {
         {
           title: '集数',
           key: 'episode',
-          width: '80'
+          align: 'center',
+          width: '70'
         },
         {
           title: '状态',
           slot: 'status',
+          align: 'center',
           width: '90',
         },
         {
-          title: '操作',
+          title: '下载',
           slot: 'action',
-          width: '100',
+          align: 'center',
+          width: '80',
         }
       ],
+      loading: false,
     }
   },
   methods: {
@@ -64,8 +68,12 @@ export default {
           this.$Message.error('爬虫发生了一些错误，未能成功拉取数据，请稍后重试~')
           return
         }
-        this.filesData = result.reverse()
-        await this.saveJPTeleplayLibrary(result)
+        await this.saveJPTeleplayLibrary(result) // 存储数据
+        // 更新vuex
+        const jp = await this.$db.JPTeleplayLibrary.sort({created_at: -1}).find()
+        this.setJP(jp)
+        this.filesData = this.jp
+
       })
     },
     async getJPTeleplayLibrary(){
@@ -79,6 +87,8 @@ export default {
         let result = await this.findOneJP(item.name,item.pid)
         if(!result){
           await this.$db.JPTeleplayLibrary.insert(item)
+        } else {
+          // await this.$db.JPTeleplayLibrary.update()
         }
       }
     },
@@ -90,14 +100,15 @@ export default {
       await this.getFilmsData()
       this.loading = false
     },
+    ...mapActions('BasicLibrary', [
+      'setJP'
+    ])
   },
-  created() {
-    const st = (new Date()).getTime()
-    console.log(st)
-    this.filesData = this.jp
-    const et = (new Date()).getTime()
-    console.log(et)
-    console.log(et - st)
+  components: {
+    FilmTable,
+  },
+  mounted() {
+    // this.filesData = this.jp
   },
   computed: {
     ...mapGetters('BasicLibrary',[
@@ -107,7 +118,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  .web-files-wrap{
-    position: relative;
-  }
+
 </style>

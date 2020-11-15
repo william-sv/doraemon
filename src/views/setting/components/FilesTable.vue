@@ -58,7 +58,13 @@
       }
     },
     methods: {
-      changePage(){},
+      changePage(){
+        this.filesList = this.filesData.slice((this.currentPageNum - 1) * 10, this.currentPageNum * 10)
+      },
+      restPageSetting(){
+        this.pageTotal = 0
+        this.currentPageNum = 1
+      },
     },
     watch: {
       filesData: function(){
@@ -71,10 +77,10 @@
 
 <style scoped>
   .files-table-wrap {
-    height: 500px;
+    height: 550px;
   }
   .files-table-item {
-    height: 450px;
+    height: 500px;
   }
   .file-name {
     display: inline-block;

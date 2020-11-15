@@ -36,11 +36,11 @@
         <Button type="success" @click="handleAddLibrary" long>确认</Button>
       </div>
     </Modal>
-    <Modal v-model="openViewFilesModal" width="80%" :footer-hide="true">
+    <Modal v-model="openViewFilesModal" width="80%" @on-cancel="handleViewFilesCancel" :footer-hide="true">
       <div slot="header" style="text-align: center;font-weight: bold;font-size: 14px;">
         {{ viewLibraryFilesTitle !== '' ? viewLibraryFilesTitle : '无标题'}}
       </div>
-      <FilesTable :filesData="filesData" />
+      <FilesTable ref="filesTable" :filesData="filesData" />
     </Modal>
   </div>
 </template>
@@ -119,6 +119,9 @@
         this.viewLibraryFilesTitle = name
         this.openViewFilesModal = true
       },
+      handleViewFilesCancel(){
+        this.$refs['filesTable'].restPageSetting()
+      },
       async deleteLibrary(id){
         await this.$db.libraries.remove({_id: id})
         await this.$db.filmsLibrary.remove({library_id: id}, { multi: true }) // { multi: true } 允许删除多个文件
@@ -185,6 +188,7 @@
               library_id: item.library_id,
               created_at: item.created_at,
               file_id: item._id,
+              status: 1,
             })
           }
         }
@@ -230,9 +234,6 @@
         'films'
       ])
     },
-    // async mounted() {
-    //   await this.getLibrariesData()
-    // },
     created(){
       this.librariesData = this.libraries
     }

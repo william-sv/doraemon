@@ -47,9 +47,9 @@ async function readFileFromFolder(dirPath, dirFiles, created_at){
       if (usefulFiles.indexOf(fileFormat) !== -1) {
         let fileSize = 0
         const fileSizeLength = stat.size.toString().length
-        if(fileSizeLength <= 8){
+        if(fileSizeLength <= 6){
           fileSize = Math.round((stat.size / 1024) * 100 ) / 100 + 'KB'
-        } else if (fileSizeLength <= 9 && fileSizeLength > 8){
+        } else if (fileSizeLength <= 9 && fileSizeLength > 6){
           fileSize = Math.round((stat.size / 1024 / 1024) * 100 ) / 100 + 'MB'
         } else if(fileSizeLength > 9){
           fileSize = Math.round((stat.size / 1024 / 1024 / 1024) * 100 ) / 100 + 'GB'
