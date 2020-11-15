@@ -10,7 +10,7 @@ function DB(database){
 }
 DB.prototype.limit = function (offset, limit) {
   this.offset = offset
-  this.limit = limit
+  this.$limit = limit
   return this
 }
 DB.prototype.sort = function(orderby){
@@ -30,24 +30,16 @@ DB.prototype.find = function (query, select) {
       stmt.sort(this.orderby)
     }
     if(this.offset !== undefined){
-      stmt.skip(this.offset).limit(this.limit)
+      stmt.skip(this.offset).limit(this.$limit)
     }
+    this.offset = undefined // 重置 offset
+
     if(select !== undefined){
       stmt.projection(select || {})
     }
     stmt.exec((err,docs) => {
       if(err){
         return reject(err)
-      }
-      /**
-       * 搜索完成后重置 offset、orderby、limit 否则会影响到下一次查询
-       * */
-      this.orderby = undefined
-      this.offset = undefined
-      this.limit = function (offset, limit) {
-        this.offset = offset
-        this.limit = limit
-        return this
       }
       resolve(docs)
     })
